@@ -26,7 +26,7 @@ public class TwitterProject {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         new Homepage().show();
 
     }
@@ -35,7 +35,7 @@ public class TwitterProject {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://mysql.ilab.sit.kmutt.ac.th/twitter_data", "tinny", ".=hxitdv[vk=urwfh");
+                    "jdbc:mysql://mysql.ilab.sit.kmutt.ac.th/twitter_data_tinny", "tinny", ".=hxitdv[vk=urwfh");
             System.out.println("Connect successful ! ");
             return conn;
             //conn.close();
