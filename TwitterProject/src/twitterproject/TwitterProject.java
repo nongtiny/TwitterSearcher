@@ -16,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import com.mysql.jdbc.Driver;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,8 +29,11 @@ public class TwitterProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException {
-        new Homepage().show();
-
+       LoadingScreen load = new LoadingScreen();
+       load.setVisible(true);     
+       Homepage home = new Homepage();
+       load.dispose();
+       home.setVisible(true);
     }
 
     public static Connection getConnect() throws ClassNotFoundException {

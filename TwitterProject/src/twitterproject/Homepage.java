@@ -5,23 +5,21 @@
  */
 package twitterproject;
 
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
+import java.io.File;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -32,117 +30,118 @@ public class Homepage extends javax.swing.JFrame {
     /**
      * Creates new form Homepage
      */
-    private ResultSet results;
-    private Statement stmnt;
-    private Connection conn;
-    public SetupForHashtag set;
-    Map<String, Integer> sortedMap;
+    private Setup load;
+    
+    private ValueComparator vc;
+    Map<String, Integer> sortedTopHashtag;
+    Map<String, Integer> sortedTopTweet;
 
     public Homepage() throws ClassNotFoundException {
-        set = new SetupForHashtag();
+        //conn = TwitterProject.getConnect();
+        load = new Setup();
         initComponents();
-        ValueComparator vc =  new ValueComparator(set.getHashtagCount());
-        sortedMap = new TreeMap<String, Integer>(vc);
-        sortedMap.putAll(set.getHashtagCount()); 
+        //----------------------Hashtag------------------------------------
+//        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
+//        sortedTopHashtag = new TreeMap<String, Integer>(vc);
+//        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
+//        int i = 0;
+//        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
+//            switch (i) {
+//                case 0:
+//                    top1Label.setText(entry.getKey());
+//                    top1Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 1:
+//                    top2Label.setText(entry.getKey());
+//                    top2Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 2:
+//                    top3Label.setText(entry.getKey());
+//                    top3Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 3:
+//                    top4Label.setText(entry.getKey());
+//                    top4Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 4:
+//                    top5Label.setText(entry.getKey());
+//                    top5Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//            }
+//            i++;
+//        }
+        //-----------------------------------------------------------------
+        //----------------------User------------------------------------
+        vc = new ValueComparator(load.getSetUser().getUserPostCount());
+        sortedTopTweet = new TreeMap<String, Integer>(vc);
+        sortedTopTweet.putAll(load.getSetUser().getUserPostCount());
         int i = 0;
-        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+        for (Map.Entry<String, Integer> entry : sortedTopTweet.entrySet()) {
             switch (i) {
                 case 0:
-                    top1Label.setText(entry.getKey());
-                    top1Res.setText("" + entry.getValue()+" tweets");
+                    top1Tweeter.setText(entry.getKey());
+                    top1TweeterRes.setText("" + entry.getValue() + " tweets");
                     break;
                 case 1:
-                    top2Label.setText(entry.getKey());
-                    top2Res.setText("" + entry.getValue()+" tweets");
+                    top2Tweeter.setText(entry.getKey());
+                    top2TweeterRes.setText("" + entry.getValue() + " tweets");
                     break;
                 case 2:
-                    top3Label.setText(entry.getKey());
-                    top3Res.setText("" + entry.getValue()+" tweets");
+                    top3Tweeter.setText(entry.getKey());
+                    top3TweeterRes.setText("" + entry.getValue() + " tweets");
                     break;
                 case 3:
-                    top4Label.setText(entry.getKey());
-                    top4Res.setText("" + entry.getValue()+" tweets");
+                    top4Tweeter.setText(entry.getKey());
+                    top4TweeterRes.setText("" + entry.getValue() + " tweets");
                     break;
                 case 4:
-                    top5Label.setText(entry.getKey());
-                    top5Res.setText("" + entry.getValue()+" tweets");
+                    top5Tweeter.setText(entry.getKey());
+                    top5TweeterRes.setText("" + entry.getValue() + " tweets");
                     break;
             }
             i++;
         }
+        //-----------------------------------------------------------------
+
     }
 
-    public void searchTweetFromUsername(String user) {
-        String sql = "SELECT text_tweet FROM TWITTER_TWEET WHERE "
-                + "screen_name LIKE'%" + user + "%'";
-        String tweets = "";
-        int cnt = 1;
-        try {
-
-            stmnt = conn.createStatement();
-            results = stmnt.executeQuery(sql);
-            tweetsResult.setText("");
-            if (results.next() != false) {
-                while (results.next()) {
-                    tweetsResult.append(String.format(" (%d)  %s\n", cnt, user));
-                    tweets = String.format("\t%s", results.getString(1));
-                    tweetsResult.append(tweets);
-                    tweetsResult.append("\n");
-                    cnt++;
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Result not found", "Error!", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Please insert the value", "Error!", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        } catch (Exception e) {
-            this.dispose();
-            e.printStackTrace();
-
+    public void searchByUsername(String user) {
+        if (load.getSetUser().getUserPost().containsKey(user)) {
+            tweetsResult.setText(load.getSetUser().getUserPost().get(user));
+        } else {
+            JOptionPane.showMessageDialog(null, "Sorry, result not found", "Error!", JOptionPane.ERROR_MESSAGE);
         }
 
     }
 
-    public void searchWordInTweet(String word) {
-        String sql = "SELECT * FROM TWITTER_TWEET WHERE  "
-                + "text_tweet LIKE '% " + word + " %'";
-        int cnt = 1;
-        try {
-            stmnt = conn.createStatement();
-            results = stmnt.executeQuery(sql);
-            String userData, text;
-            tweetsResult.setText("");
-            while (results.next()) {
-                userData = String.format("(%d)\t User: %s", cnt, results.getString(2));
-                tweetsResult.append(userData + "\n");
-                text = String.format("%50s", results.getString(3));
-                tweetsResult.append(text);
-                tweetsResult.append("\n");
-                tweetsResult.append("----------------------------------------------------------------\n");
-                cnt++;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (Exception e) {
-            this.dispose();
-            e.printStackTrace();
+    public void searchByWord(String word) {
+        if (load.getSetWords().getSearchWord().containsKey(word)) {
+            tweetsResult.setText(load.getSetWords().getSearchWord().get(word));
+
+        } else {
+            load.getSetWords().set(word);
+            tweetsResult.setText(load.getSetWords().getSearchWord().get(word));
+
         }
+
     }
 
     public void searchByHashtag(String hashtag) {
-         tweetsResult.setText(set.getHashtagResult().get(hashtag));
-    }
-       
-    
+        if (load.getSetHashtag().getHashtagResult().containsKey(hashtag)) {
+            tweetsResult.setText(load.getSetHashtag().getHashtagResult().get(hashtag));
 
-    public void search(String type, String word) throws ClassNotFoundException {
+        } else {
+            JOptionPane.showMessageDialog(null, "Sorry, result not found", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void search(String type, String word) {
         tweetsResult.setText("");
         try {
             if (type.equalsIgnoreCase("Word")) {
-                searchWordInTweet(word);
+                searchByWord(word);
             } else if (type.equalsIgnoreCase("User")) {
-                searchTweetFromUsername(word);
+                searchByUsername(word);
             } else if (type.equalsIgnoreCase("Hashtag")) {
                 searchByHashtag(word);
             }
@@ -151,34 +150,24 @@ public class Homepage extends javax.swing.JFrame {
         }
     }
 
-    private void topHashtag() throws ClassNotFoundException {
-//        String sql = "SELECT text_tweet FROM TWITTER_TWEET WHERE text_tweet LIKE '%#'";
-//        hashtag = "";
-//        cntHashtag = 0;
-//        try {
-//            conn = TwitterProject.getConnect();
-//            stmnt = conn.createStatement();
-//            results = stmnt.executeQuery(sql);
-//            while (results.next()) {
-//                hashtag = results.getString(1);
-//                Pattern pattern = Pattern.compile("((?:\\S\\u0023)[\\u0E00-\\u0E60 0-9 a-z A-Z]+)");
-//                Matcher matcherForHashtag = pattern.matcher(hashtag);
-//                while (matcherForHashtag.find()) {
-//                    //System.out.println(matcher.group(1));
-//                    hashTagData.add(matcherForHashtag.group(1).substring(1));
-//                }
+//    public void selectedList(){
+//        recentSearchList.addListSelectionListener(new ListSelectionListener() {
+//  
+//            public void valueChanged(ListSelectionEvent e) {
+//                String selected = recentSearchList.getSelectedValue();
+//               if(e.getValueIsAdjusting()){
+//                   JOptionPane.showMessageDialog(null, "Please select only one element", "Error!", JOptionPane.ERROR_MESSAGE);
+//               }else{
+//                   if(selected.substring(0, 1).equals("W"))
+//                       searchByWord(selected);
+//                   else if(selected.substring(0, 1).equals("U"))
+//                       searchByUsername(selected);
+//                   else if(selected.substring(0, 1).equals("#"))
+//                       searchByHashtag(selected);
+//               }
 //            }
-//            
-//            for(String tmp : hashTagData){
-//                Integer count = hashTagCount.get(tmp);
-//                hashTagCount.put(tmp, (count == null) ? 1 : count + 1);
-//            }
-//
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-    }
-
+//        });
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -223,14 +212,17 @@ public class Homepage extends javax.swing.JFrame {
         top5Tweeter = new javax.swing.JLabel();
         top5TweeterRes = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        recentSearchList = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(1445, 850));
+        setPreferredSize(new java.awt.Dimension(1068, 850));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(239, 239, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1468, 753));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1068, 753));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -242,17 +234,17 @@ public class Homepage extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(392, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(393, 393, 393)
                 .addComponent(jLabel1)
-                .addGap(427, 427, 427))
+                .addContainerGap(426, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         tweetsResult.setColumns(20);
@@ -381,7 +373,7 @@ public class Homepage extends javax.swing.JFrame {
                     .addComponent(top5Res))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+                .addContainerGap(38, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(45, 45, 45))
         );
@@ -460,9 +452,6 @@ public class Homepage extends javax.swing.JFrame {
             .addGroup(panelLayout.createSequentialGroup()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jLabel4))
-                    .addGroup(panelLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(top1TweeterRes)
@@ -474,8 +463,11 @@ public class Homepage extends javax.swing.JFrame {
                             .addComponent(top4Tweeter)
                             .addComponent(top4TweeterRes)
                             .addComponent(top5Tweeter)
-                            .addComponent(top5TweeterRes))))
-                .addContainerGap(54, Short.MAX_VALUE))
+                            .addComponent(top5TweeterRes)))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel4)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -502,72 +494,92 @@ public class Homepage extends javax.swing.JFrame {
                 .addComponent(top5Tweeter)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(top5TweeterRes)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel5.setText("Recent Search");
+
+        recentSearchList.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        recentSearchList.setForeground(new java.awt.Color(0, 153, 204));
+        jScrollPane2.setViewportView(recentSearchList);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 224, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(35, 35, 35))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 141, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(500, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(519, 519, 519))))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1)
-                    .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, Short.MAX_VALUE)
+                            .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1092, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -584,12 +596,11 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_searchFieldActionPerformed
 
     private void searchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchButtonMouseClicked
-        try {
-            search((String) jComboBox1.getSelectedItem(), searchField.getText());
-            //topHashtag();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        search((String) jComboBox1.getSelectedItem(), searchField.getText());
+        //topHashtag();
+
+
     }//GEN-LAST:event_searchButtonMouseClicked
 
     /**
@@ -606,27 +617,31 @@ public class Homepage extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Homepage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Homepage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Homepage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Homepage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Homepage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    new Homepage().setVisible(true);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }
         });
     }
@@ -637,13 +652,16 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panel;
+    private javax.swing.JList<String> recentSearchList;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchField;
     private javax.swing.JLabel top1Label;
