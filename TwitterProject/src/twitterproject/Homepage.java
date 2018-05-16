@@ -41,41 +41,41 @@ public class Homepage extends javax.swing.JFrame {
         load = new Setup();
         initComponents();
         //----------------------Hashtag------------------------------------
-//        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
-//        sortedTopHashtag = new TreeMap<String, Integer>(vc);
-//        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
-//        int i = 0;
-//        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
-//            switch (i) {
-//                case 0:
-//                    top1Label.setText(entry.getKey());
-//                    top1Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 1:
-//                    top2Label.setText(entry.getKey());
-//                    top2Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 2:
-//                    top3Label.setText(entry.getKey());
-//                    top3Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 3:
-//                    top4Label.setText(entry.getKey());
-//                    top4Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 4:
-//                    top5Label.setText(entry.getKey());
-//                    top5Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//            }
-//            i++;
-//        }
+        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
+        sortedTopHashtag = new TreeMap<String, Integer>(vc);
+        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
+            switch (i) {
+                case 0:
+                    top1Label.setText(entry.getKey());
+                    top1Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 1:
+                    top2Label.setText(entry.getKey());
+                    top2Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 2:
+                    top3Label.setText(entry.getKey());
+                    top3Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 3:
+                    top4Label.setText(entry.getKey());
+                    top4Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 4:
+                    top5Label.setText(entry.getKey());
+                    top5Res.setText("" + entry.getValue() + " tweets");
+                    break;
+            }
+            i++;
+        }
         //-----------------------------------------------------------------
         //----------------------User------------------------------------
         vc = new ValueComparator(load.getSetUser().getUserPostCount());
         sortedTopTweet = new TreeMap<String, Integer>(vc);
         sortedTopTweet.putAll(load.getSetUser().getUserPostCount());
-        int i = 0;
+        i = 0;
         for (Map.Entry<String, Integer> entry : sortedTopTweet.entrySet()) {
             switch (i) {
                 case 0:

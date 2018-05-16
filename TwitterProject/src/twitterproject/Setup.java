@@ -62,14 +62,6 @@ public class Setup {
         
     }
     
-//    public void set(){
-//        status = "Setting user tweets";
-//        jLabel3.setText(status);
-//        setUser.set(reader);
-//        status = "Setting hashtag tweets";
-//        jLabel3.setText(status);
-//        //setHashtag.set();
-//    }
     
     public SetupForHashtag getSetHashtag() {
         return setHashtag;
