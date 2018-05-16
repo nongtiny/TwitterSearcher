@@ -1,2 +1,6 @@
 # TwitterSearcher
-Extract twitter_tweet.zip in assests folder then copy the csv file in build/classes folder
+This is an OOSD subject project.
+Noob java algoritm and design pattern.
+You guys can free to use it lol.
+<u>Important</u>
+Extract twitter_tweet.zip in release then copy the csv file in build/classes folder
