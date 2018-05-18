@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static twitterproject.LoadingScreen.jLabel3;
+import javax.swing.JTextArea;
+import static twitterproject.LoadingScreen.jTextArea1;
 
 /**
  *
@@ -52,13 +53,16 @@ public class Setup {
         setUser = new SetupForUsername();
         //setHashtag = new SetupForHashtag(conn);
         setWords = new SetupForWord(conn);
-        status = "Setting user tweets";
-        jLabel3.setText(status);
+        StringBuilder sb = new StringBuilder("Welcome to noob twitter searcher");
+        sb.append("\n\n" + "Step 1: Setting user tweets");
+        jTextArea1.setText(sb.toString());
         setUser.set(reader);
-        status = "Setting hashtag tweets";
-        jLabel3.setText(status);
+        sb.append("\n Finished\n\n");
+        sb.append("Step 2: Setting hashtag tweets");
+        jTextArea1.setText(sb.toString());
         //setHashtag.set();
-        jLabel3.setText("Finish");
+        sb.append("\n Finished");
+        jTextArea1.setText(sb.toString());
         
     }
     
