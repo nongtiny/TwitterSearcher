@@ -9,20 +9,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author Administrator
  */
 public class SetupForHashtag {
-     private ResultSet results;
-     private Statement stmnt;
+
+    private ResultSet results;
+    private Statement stmnt;
     private Connection conn;
     private List<String> hashtagWord;
     private Map<String, Integer> hashtagCount;
     private Map<String, String> hashtagResult;
-    
+
     public SetupForHashtag(Connection conn) {
         this.conn = conn;
         hashtagWord = new ArrayList<String>();
@@ -30,10 +34,10 @@ public class SetupForHashtag {
         hashtagResult = new HashMap<String, String>();
     }
 
-    void set()  {
+    public void set() {
         String sql = "SELECT text_tweet FROM TWITTER_TWEET WHERE text_tweet LIKE '%#%'";
-       try{
-           stmnt = conn.createStatement();
+        try {
+            stmnt = conn.createStatement();
             results = stmnt.executeQuery(sql);
             String data;
             String[] hashtag;
@@ -55,8 +59,6 @@ public class SetupForHashtag {
                     }
                 }
             }
-            
-       
 
             for (String tmp : hashtagWord) {
                 Integer count = hashtagCount.get(tmp);
@@ -67,7 +69,7 @@ public class SetupForHashtag {
             ex.printStackTrace();
         }
     }
-    
+
     public Map<String, String> getHashtagResult() {
         return hashtagResult;
     }
@@ -75,8 +77,7 @@ public class SetupForHashtag {
     public Map<String, Integer> getHashtagCount() {
         return hashtagCount;
     }
-    
-    
+
     public List<String> getHashtagWord() {
         return hashtagWord;
     }

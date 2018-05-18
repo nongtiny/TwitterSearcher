@@ -5,6 +5,8 @@
  */
 package twitterproject;
 
+import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -35,41 +37,41 @@ public class Homepage extends javax.swing.JFrame {
         ValueComparator vc;
         initComponents();
         //----------------------Hashtag------------------------------------
-        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
-        sortedTopHashtag = new TreeMap<String, Integer>(vc);
-        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
-        int i = 0;
-        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
-            switch (i) {
-                case 0:
-                    top1Label.setText(entry.getKey());
-                    top1Res.setText("" + entry.getValue() + " tweets");
-                    break;
-                case 1:
-                    top2Label.setText(entry.getKey());
-                    top2Res.setText("" + entry.getValue() + " tweets");
-                    break;
-                case 2:
-                    top3Label.setText(entry.getKey());
-                    top3Res.setText("" + entry.getValue() + " tweets");
-                    break;
-                case 3:
-                    top4Label.setText(entry.getKey());
-                    top4Res.setText("" + entry.getValue() + " tweets");
-                    break;
-                case 4:
-                    top5Label.setText(entry.getKey());
-                    top5Res.setText("" + entry.getValue() + " tweets");
-                    break;
-            }
-            i++;
-        }
+//        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
+//        sortedTopHashtag = new TreeMap<String, Integer>(vc);
+//        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
+//        int i = 0;
+//        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
+//            switch (i) {
+//                case 0:
+//                    top1Label.setText(entry.getKey());
+//                    top1Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 1:
+//                    top2Label.setText(entry.getKey());
+//                    top2Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 2:
+//                    top3Label.setText(entry.getKey());
+//                    top3Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 3:
+//                    top4Label.setText(entry.getKey());
+//                    top4Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//                case 4:
+//                    top5Label.setText(entry.getKey());
+//                    top5Res.setText("" + entry.getValue() + " tweets");
+//                    break;
+//            }
+//            i++;
+//        }
         //-----------------------------------------------------------------
         //----------------------User------------------------------------
         vc = new ValueComparator(load.getSetUser().getUserPostCount());
         sortedTopTweet = new TreeMap<String, Integer>(vc);
         sortedTopTweet.putAll(load.getSetUser().getUserPostCount());
-        i = 0;
+        int i = 0;
         for (Map.Entry<String, Integer> entry : sortedTopTweet.entrySet()) {
             switch (i) {
                 case 0:
@@ -174,6 +176,40 @@ public class Homepage extends javax.swing.JFrame {
         if (!model.contains(word)) {
             model.addElement(word);
             jList1.setModel(model);
+        }
+    }
+
+    private void autoCompleteText(String type, String word) {
+        String complete = "";
+        int start = word.length();
+        int last = word.length();
+        if (type.equals("Hashtag")) {
+            for (int i = 0; i < load.getSetHashtag().getHashtagWord().size(); i++) {
+                if (load.getSetHashtag().getHashtagWord().get(i).startsWith(word)) {
+                    complete = load.getSetHashtag().getHashtagWord().get(i);
+                    last = complete.length();
+                    break;
+                }
+            }
+            if (last > start) {
+                searchField.setText(complete);
+                searchField.setCaretPosition(last);
+                searchField.moveCaretPosition(start);
+            }
+        }
+        if (type.equals("User")) {
+            for (int i = 0; i < load.getSetUser().getUserName().size(); i++) {
+                if (load.getSetUser().getUserName().get(i).startsWith(word)) {
+                    complete = load.getSetUser().getUserName().get(i);
+                    last = complete.length();
+                    break;
+                }
+            }
+            if (last > start) {
+                searchField.setText(complete);
+                searchField.setCaretPosition(last);
+                searchField.moveCaretPosition(start);
+            }
         }
     }
 
@@ -284,6 +320,11 @@ public class Homepage extends javax.swing.JFrame {
         searchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchFieldActionPerformed(evt);
+            }
+        });
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                searchFieldKeyPressed(evt);
             }
         });
 
@@ -607,6 +648,25 @@ public class Homepage extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_searchButtonMouseClicked
+
+    private void searchFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyPressed
+        switch(evt.getKeyCode()){
+            case KeyEvent.VK_BACK_SPACE:
+                break;
+            case KeyEvent.VK_ENTER:
+                searchField.setText(searchField.getText());
+                break;
+            default:
+                 EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String word = searchField.getText();
+                autoCompleteText((String) jComboBox1.getSelectedItem(), word);
+            }
+        });
+                 
+        }
+    }//GEN-LAST:event_searchFieldKeyPressed
 
     /**
      * @param args the command line arguments

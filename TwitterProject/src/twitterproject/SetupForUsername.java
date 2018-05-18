@@ -6,38 +6,30 @@
 package twitterproject;
 
 import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  *
  * @author Administrator
  */
 public class SetupForUsername {
-    
-	
-    //For search user
-    public List<String> userName;
-    public Map<String, Integer> userPostCount;
-    public Map<String, String> userPost;
 
- 
+    //For search user
+    private List<String> userName;
+    private Map<String, Integer> userPostCount;
+    private Map<String, String> userPost;
 
     public SetupForUsername() {
         userName = new ArrayList<String>();
         userPost = new HashMap<String, String>();
         userPostCount = new HashMap<String, Integer>();
     }
-    
-    public void set(CsvParser reader){
-         String[] nextLine;
+
+    public void set(CsvParser reader) {
+        String[] nextLine;
 
         while ((nextLine = reader.parseNext()) != null) {
             String user = nextLine[1];
@@ -61,8 +53,8 @@ public class SetupForUsername {
         reader.stopParsing();
         System.out.println("User name finish");
     }
-    
-     public List<String> getUserName() {
+
+    public List<String> getUserName() {
         return userName;
     }
 

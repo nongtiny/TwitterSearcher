@@ -5,24 +5,16 @@
  */
 package twitterproject;
 
-import com.univocity.parsers.csv.CsvParser;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -30,9 +22,8 @@ import java.util.logging.Logger;
  */
 public class SetupForWord {
 
-    Connection conn;
-    ResultSet results;
-    String path;
+    private Connection conn;
+    private ResultSet results;
     private Statement stmnt;
     private Map<String, String> searchWord;
 
