@@ -5,11 +5,6 @@
  */
 package twitterproject;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 /**
  *
  * @author Administrator

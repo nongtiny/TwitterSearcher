@@ -5,19 +5,10 @@
  */
 package twitterproject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import com.mysql.jdbc.Driver;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *

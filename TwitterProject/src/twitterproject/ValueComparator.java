@@ -15,7 +15,7 @@ import java.util.Map;
 public class ValueComparator implements Comparator<String>{
 
 
-    Map<String, Integer> map;
+    public Map<String, Integer> map;
 
     public ValueComparator(Map<String, Integer> base) {
         this.map = base;
