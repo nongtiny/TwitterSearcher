@@ -37,41 +37,41 @@ public class Homepage extends javax.swing.JFrame {
         ValueComparator vc;
         initComponents();
         //----------------------Hashtag------------------------------------
-//        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
-//        sortedTopHashtag = new TreeMap<String, Integer>(vc);
-//        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
-//        int i = 0;
-//        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
-//            switch (i) {
-//                case 0:
-//                    top1Label.setText(entry.getKey());
-//                    top1Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 1:
-//                    top2Label.setText(entry.getKey());
-//                    top2Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 2:
-//                    top3Label.setText(entry.getKey());
-//                    top3Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 3:
-//                    top4Label.setText(entry.getKey());
-//                    top4Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//                case 4:
-//                    top5Label.setText(entry.getKey());
-//                    top5Res.setText("" + entry.getValue() + " tweets");
-//                    break;
-//            }
-//            i++;
-//        }
+        vc = new ValueComparator(load.getSetHashtag().getHashtagCount());
+        sortedTopHashtag = new TreeMap<String, Integer>(vc);
+        sortedTopHashtag.putAll(load.getSetHashtag().getHashtagCount());
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : sortedTopHashtag.entrySet()) {
+            switch (i) {
+                case 0:
+                    top1Label.setText(entry.getKey());
+                    top1Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 1:
+                    top2Label.setText(entry.getKey());
+                    top2Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 2:
+                    top3Label.setText(entry.getKey());
+                    top3Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 3:
+                    top4Label.setText(entry.getKey());
+                    top4Res.setText("" + entry.getValue() + " tweets");
+                    break;
+                case 4:
+                    top5Label.setText(entry.getKey());
+                    top5Res.setText("" + entry.getValue() + " tweets");
+                    break;
+            }
+            i++;
+        }
         //-----------------------------------------------------------------
         //----------------------User------------------------------------
         vc = new ValueComparator(load.getSetUser().getUserPostCount());
         sortedTopTweet = new TreeMap<String, Integer>(vc);
         sortedTopTweet.putAll(load.getSetUser().getUserPostCount());
-        int i = 0;
+        i = 0;
         for (Map.Entry<String, Integer> entry : sortedTopTweet.entrySet()) {
             switch (i) {
                 case 0:
@@ -601,9 +601,9 @@ public class Homepage extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(14, 14, 14)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -612,21 +612,21 @@ public class Homepage extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE))
-                .addContainerGap(127, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -642,11 +642,7 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_searchFieldActionPerformed
 
     private void searchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchButtonMouseClicked
-
         search((String) jComboBox1.getSelectedItem(), searchField.getText());
-        //topHashtag();
-
-
     }//GEN-LAST:event_searchButtonMouseClicked
 
     private void searchFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyPressed

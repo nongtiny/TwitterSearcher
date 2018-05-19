@@ -39,18 +39,18 @@ public class SetupForWord {
             results = stmnt.executeQuery(sql);
             String user;
             String data;
-
+            String line = "-------------------------------------------------------------";
             while (results.next()) {
                 user = results.getString(1);
                 data = results.getString(2);
                 if (searchWord.containsKey((String) str) == true
                         && !searchWord.get(str).equals(data)) {
                     StringBuilder sb = new StringBuilder(searchWord.get(str));
-                    sb.append(String.format("[User: %s]\n    %s\n\n\n", user, data));
+                    sb.append("[User: ").append(user).append("]\n    ").append(data).append("\n\n\n");
 
                     searchWord.put(str, sb.toString());
                 } else {
-                    searchWord.put(str, String.format("[User: %s]\n    %s\n\n\n", user, data));
+                    searchWord.put(str, "[User: "+user+"]\n"+"    "+data+"\n\n\n");
                 }
             }
             System.out.println("Word finish");

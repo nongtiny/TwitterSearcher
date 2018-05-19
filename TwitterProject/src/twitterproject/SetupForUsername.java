@@ -30,19 +30,17 @@ public class SetupForUsername {
 
     public void set(CsvParser reader) {
         String[] nextLine;
-
         while ((nextLine = reader.parseNext()) != null) {
-            String user = nextLine[1];
+           String user = nextLine[1];
             String tweet = nextLine[2];
             userName.add(user);
             if (userPost.containsKey((String) user) == true
                     && !userPost.get(user).equals(tweet)) {
                 StringBuilder sb = new StringBuilder(userPost.get(user));
-                sb.append(String.format("\n\n\n  %s", tweet));
-
+                sb.append("<"+tweet).append(">\n\n\n");
                 userPost.put(user, sb.toString());
             } else {
-                userPost.put(user, String.format("   %s", tweet));
+                userPost.put(user, "<"+tweet+">\n\n\n");
             }
 
         }
