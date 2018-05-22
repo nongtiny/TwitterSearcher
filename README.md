@@ -7,6 +7,7 @@ You guys can free to use it lol.
 1) **Extract twitter_tweet.zip in release then copy the twitter_tweet.csv file into build/classes folder**
 2) This program have to connect with **KMUTT_Secure or KMUTT_SecureN** wifi to fecth tweets data from SIT database server
 3) **Class and sequence diagram are in the assests folder**
+4) Please run this project with Netbeans IDE
 
 ### Pros
 - No Pros
